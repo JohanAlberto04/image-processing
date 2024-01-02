@@ -423,6 +423,12 @@ function tAfin(evt: any): void{
   imagenSal.imageArray2DtoData(pantalla2, MathImg.tAfin(imagenSal, factores));
 }
 
+//operaciones nuevas/proyecto/
+
+function BorrarRojo(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.borrarColorRojo(imagenSal.getArrayImg()));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
  
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
@@ -499,3 +505,8 @@ document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, f
 document.getElementById("op-shearingX").addEventListener('click', shearingX, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+
+//operaciones nuevas
+//operaciones de borrado de color
+
+document.getElementById('borrarColorRojo').addEventListener('click', BorrarRojo);

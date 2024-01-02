@@ -1148,6 +1148,22 @@ var MathImg = /** @class */ (function () {
       */
         return sal;
     };
+    //operaciones nuevas/proyecto//
+    //operaciones para borrar color ///
+    MathImg.borrarColorRojo = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Borrar el componente rojo, mantener los componentes verde y azul
+                sal[0][i][j] = 0;
+                sal[1][i][j] = arrImage[1][i][j];
+                sal[2][i][j] = arrImage[2][i][j];
+            }
+        }
+        return sal;
+    };
     return MathImg;
 }());
 export { MathImg };
