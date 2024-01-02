@@ -392,6 +392,14 @@ function BorrarRojo(evt) {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
     imagenSal.imageArray2DtoData(pantalla2, MathImg.borrarColorRojo(imagenSal.getArrayImg()));
 }
+function BorrarVerde(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.borrarColorVerde(imagenSal.getArrayImg()));
+}
+function BorrarAzul(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.borrarColorAzul(imagenSal.getArrayImg()));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
@@ -460,3 +468,5 @@ document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //operaciones nuevas
 //operaciones de borrado de color
 document.getElementById('borrarColorRojo').addEventListener('click', BorrarRojo);
+document.getElementById('borrarColorVerde').addEventListener('click', BorrarVerde);
+document.getElementById('borrarColorAzul').addEventListener('click', BorrarAzul);

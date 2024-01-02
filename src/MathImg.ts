@@ -1255,9 +1255,39 @@ export class MathImg {
     return sal;
 }
 
+public static borrarColorVerde(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
 
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Borrar el componente verde, mantener los componentes rojo y azul
+          sal[0][i][j] = arrImage[0][i][j];
+          sal[1][i][j] = 0;
+          sal[2][i][j] = arrImage[2][i][j];
+      }
+  }
 
+  return sal;
+}
 
+public static borrarColorAzul(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Borrar el componente azul, mantener los componentes rojo y verde
+          sal[0][i][j] = arrImage[0][i][j];
+          sal[1][i][j] = arrImage[1][i][j];
+          sal[2][i][j] = 0;
+      }
+  }
+
+  return sal;
+}
 
 
 
