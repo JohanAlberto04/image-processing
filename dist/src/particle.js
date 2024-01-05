@@ -87,3 +87,45 @@ var ParticleText = /** @class */ (function () {
     return ParticleText;
 }());
 export { ParticleText };
+var Stickman = /** @class */ (function () {
+    function Stickman(x, y, ctx) {
+        this.x = x;
+        this.y = y;
+        this.ctx = ctx;
+    }
+    Stickman.prototype.draw = function () {
+        // Cabeza
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y - 30, 10, 0, Math.PI * 2);
+        this.ctx.fillStyle = 'black';
+        this.ctx.fill();
+        this.ctx.closePath();
+        // Cuerpo
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y - 20);
+        this.ctx.lineTo(this.x, this.y + 10);
+        this.ctx.strokeStyle = 'black';
+        this.ctx.stroke();
+        this.ctx.closePath();
+        // Brazos
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y - 10);
+        this.ctx.lineTo(this.x + 10, this.y);
+        this.ctx.moveTo(this.x, this.y - 10);
+        this.ctx.lineTo(this.x - 10, this.y);
+        this.ctx.strokeStyle = 'black';
+        this.ctx.stroke();
+        this.ctx.closePath();
+        // Piernas
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y + 10);
+        this.ctx.lineTo(this.x + 10, this.y + 20);
+        this.ctx.moveTo(this.x, this.y + 10);
+        this.ctx.lineTo(this.x - 10, this.y + 20);
+        this.ctx.strokeStyle = 'black';
+        this.ctx.stroke();
+        this.ctx.closePath();
+    };
+    return Stickman;
+}());
+export { Stickman };

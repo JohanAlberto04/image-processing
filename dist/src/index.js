@@ -3,6 +3,7 @@ import { ImageType } from "./ImageType.js";
 import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
 import { ParticleText } from "./particle.js";
+import { Stickman } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
 var lienzo2;
@@ -205,6 +206,7 @@ var numberOfParticles = 1000;
 var particlesArray;
 particlesArray = new Array(0);
 var imagenSal;
+var stickman;
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -285,6 +287,41 @@ function animateParticles() {
         particleArray[i].draw();
     }
     requestAnimationFrame(animateParticles);
+}
+///funcion de stickman 
+var stickmanSpeedX = 2; // Velocidad horizontal del stickman
+var stickmanSpeedY = 1; // Velocidad vertical del stickman
+// Inicialización del stickman
+function initStickman() {
+    // Inicializa la imagen original
+    imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    w = imagenSal.getWidth();
+    h = imagenSal.getHeight();
+    // Inicializa el stickman en el centro de la pantalla
+    stickman = new Stickman(pantalla2.canvas.width / 2, pantalla2.canvas.height / 2, ctx);
+}
+// Función de animación del stickman
+function animateStickman() {
+    // Dibuja la imagen original
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Actualiza la posición del stickman
+    stickman.x += stickmanSpeedX;
+    stickman.y += stickmanSpeedY;
+    // Verifica límites para que el stickman no salga fuera de la imagen
+    if (stickman.x < 0 || stickman.x > pantalla2.canvas.width) {
+        stickmanSpeedX *= -1; // Invierte la dirección al llegar a los bordes horizontales
+    }
+    if (stickman.y < 0 || stickman.y > pantalla2.canvas.height) {
+        stickmanSpeedY *= -1; // Invierte la dirección al llegar a los bordes verticales
+    }
+    // Dibuja el stickman en su nueva posición
+    stickman.draw();
+    // Llama a la animación de forma recursiva
+    requestAnimationFrame(animateStickman);
+}
+function iniciarstickman(evt) {
+    initStickman();
+    animateStickman();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -467,6 +504,7 @@ document.getElementById("op-shearingY").addEventListener('click', shearingY, fal
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //operaciones nuevas
 //operaciones de borrado de color
-document.getElementById('borrarColorRojo').addEventListener('click', BorrarRojo);
-document.getElementById('borrarColorVerde').addEventListener('click', BorrarVerde);
-document.getElementById('borrarColorAzul').addEventListener('click', BorrarAzul);
+document.getElementById("borrarColorRojo").addEventListener('click', BorrarRojo);
+document.getElementById("borrarColorVerde").addEventListener('click', BorrarVerde);
+document.getElementById("borrarColorAzul").addEventListener('click', BorrarAzul);
+document.getElementById("iniciarstickman").addEventListener('click', iniciarstickman);

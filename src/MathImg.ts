@@ -1291,4 +1291,11 @@ public static borrarColorAzul(arrImage: number[][][]): number[][][] {
 
 
 
+
+
+
+
+
+
+
 }
