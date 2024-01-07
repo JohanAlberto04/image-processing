@@ -1192,6 +1192,53 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
+    MathImg.Barrido = function (arrImage, direccion) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Determina la cantidad de desplazamiento para el efecto de barrido
+        var desplazamiento = 70;
+        // Aplica el efecto de barrido en la dirección especificada
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                var nuevoJ = j;
+                var nuevoI = i;
+                if (direccion === 'horizontal') {
+                    nuevoJ = (j + desplazamiento) % width;
+                }
+                else if (direccion === 'vertical') {
+                    nuevoI = (i + desplazamiento) % height;
+                }
+                sal[0][i][j] = arrImage[0][nuevoI][nuevoJ];
+                sal[1][i][j] = arrImage[1][nuevoI][nuevoJ];
+                sal[2][i][j] = arrImage[2][nuevoI][nuevoJ];
+            }
+        }
+        return sal;
+    };
+    MathImg.efectoPrisma = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Parámetros de la distorsión
+        var factorDistorsion = 10; // Ajusta según la intensidad de la distorsión
+        // Itera a través de la imagen original
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Calcula una nueva posición basada en la distorsión
+                var nuevoI = i + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
+                var nuevoJ = j + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
+                // Asegúrate de que la nueva posición esté dentro de los límites de la imagen
+                var iDistorsionado = Math.max(0, Math.min(height - 1, nuevoI));
+                var jDistorsionado = Math.max(0, Math.min(width - 1, nuevoJ));
+                // Aplica el color original a la nueva posición
+                sal[0][i][j] = arrImage[0][iDistorsionado][jDistorsionado];
+                sal[1][i][j] = arrImage[1][iDistorsionado][jDistorsionado];
+                sal[2][i][j] = arrImage[2][iDistorsionado][jDistorsionado];
+            }
+        }
+        return sal;
+    };
     return MathImg;
 }());
 export { MathImg };

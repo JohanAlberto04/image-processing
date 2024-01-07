@@ -489,8 +489,28 @@ function BorrarAzul(evt: any): void {
   imagenSal.imageArray2DtoData(pantalla2, MathImg.borrarColorAzul(imagenSal.getArrayImg()));
 }
 
+function Barrido(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
 
+  // Pregunta al usuario la dirección del barrido
+  const direccion = prompt('Ingresa la dirección del barrido: (horizontal/vertical)').toLowerCase();
 
+  // Verifica que la dirección ingresada sea válida
+  if (direccion !== 'horizontal' && direccion !== 'vertical') {
+      alert('Dirección no válida. Selecciona horizontal o vertical.');
+      return;
+  }
+
+  // Aplica la función de efecto de barrido con la dirección proporcionada
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.Barrido(imagenSal.getArrayImg(), direccion));
+}
+
+function Prisma(evt: any): void {
+  const imagenSal: ImageType = new ImageType(pantalla1, imgLocal.getImage());
+
+  // Aplica la función de efecto de prisma
+  imagenSal.imageArray2DtoData(pantalla2, MathImg.efectoPrisma(imagenSal.getArrayImg()));
+}
 
 
 
@@ -579,3 +599,5 @@ document.getElementById("borrarColorVerde").addEventListener('click', BorrarVerd
 document.getElementById("borrarColorAzul").addEventListener('click', BorrarAzul);
 
 document.getElementById("iniciarstickman").addEventListener('click', iniciarstickman);
+document.getElementById('Barrido').addEventListener('click', Barrido);
+document.getElementById('Prisma').addEventListener('click', Prisma);

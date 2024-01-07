@@ -1292,6 +1292,85 @@ public static borrarColorAzul(arrImage: number[][][]): number[][][] {
 
 
 
+public static Barrido(arrImage: number[][][], direccion: 'horizontal' | 'vertical'): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Determina la cantidad de desplazamiento para el efecto de barrido
+  const desplazamiento = 70;
+
+  // Aplica el efecto de barrido en la dirección especificada
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          let nuevoJ = j;
+          let nuevoI = i;
+
+          if (direccion === 'horizontal') {
+              nuevoJ = (j + desplazamiento) % width;
+          } else if (direccion === 'vertical') {
+              nuevoI = (i + desplazamiento) % height;
+          }
+
+          sal[0][i][j] = arrImage[0][nuevoI][nuevoJ];
+          sal[1][i][j] = arrImage[1][nuevoI][nuevoJ];
+          sal[2][i][j] = arrImage[2][nuevoI][nuevoJ];
+      }
+  }
+
+  return sal;
+}
+
+
+
+
+public static efectoPrisma(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Parámetros de la distorsión
+  const factorDistorsion = 10; // Ajusta según la intensidad de la distorsión
+
+  // Itera a través de la imagen original
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Calcula una nueva posición basada en la distorsión
+          const nuevoI = i + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
+          const nuevoJ = j + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
+
+          // Asegúrate de que la nueva posición esté dentro de los límites de la imagen
+          const iDistorsionado = Math.max(0, Math.min(height - 1, nuevoI));
+          const jDistorsionado = Math.max(0, Math.min(width - 1, nuevoJ));
+
+          // Aplica el color original a la nueva posición
+          sal[0][i][j] = arrImage[0][iDistorsionado][jDistorsionado];
+          sal[1][i][j] = arrImage[1][iDistorsionado][jDistorsionado];
+          sal[2][i][j] = arrImage[2][iDistorsionado][jDistorsionado];
+      }
+  }
+
+  return sal;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
