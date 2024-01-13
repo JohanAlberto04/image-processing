@@ -249,8 +249,8 @@ export class UFO {
   }
 
   public update() {
-    // Puedes agregar lógica para cambiar la posición del platillo volador aquí
-    this.x += 2; // Ejemplo: mueve el platillo volador hacia la derecha
+    
+    this.x += 2; 
   }
 
   public draw() {
@@ -279,5 +279,52 @@ export class UFO {
     this.ctx.moveTo(this.x, this.y);
     this.ctx.lineTo(this.x, this.y + 230); // Ajusta la longitud del haz de luz según sea necesario
     this.ctx.stroke();
+  }
+}
+
+
+export class PokemonBall {
+  protected x: number;
+  protected y: number;
+  protected radius: number;
+  protected ctx: CanvasRenderingContext2D;
+
+  constructor(x: number, y: number, radius: number, ctx: CanvasRenderingContext2D) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.ctx = ctx;
+  }
+
+  public update(mouseX: number, mouseY: number) {
+    // Actualiza la posición de la bola según la posición del ratón
+    this.x = mouseX;
+    this.y = mouseY;
+  }
+
+  public draw() {
+   
+    const enlargedRadius = this.radius * 1.5; 
+
+    // Dibuja la mitad izquierda (blanca)
+    this.ctx.fillStyle = 'white';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, enlargedRadius / 2, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    // Dibuja la mitad derecha (roja)
+    this.ctx.fillStyle = 'red';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, enlargedRadius / 2, Math.PI, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    // Dibuja el punto negro en el centro
+    this.ctx.fillStyle = 'black';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
   }
 }

@@ -190,8 +190,7 @@ var UFO = /** @class */ (function () {
         this.ctx = ctx;
     }
     UFO.prototype.update = function () {
-        // Puedes agregar lógica para cambiar la posición del platillo volador aquí
-        this.x += 2; // Ejemplo: mueve el platillo volador hacia la derecha
+        this.x += 2;
     };
     UFO.prototype.draw = function () {
         // Dibuja el platillo volador
@@ -220,3 +219,39 @@ var UFO = /** @class */ (function () {
     return UFO;
 }());
 export { UFO };
+var PokemonBall = /** @class */ (function () {
+    function PokemonBall(x, y, radius, ctx) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.ctx = ctx;
+    }
+    PokemonBall.prototype.update = function (mouseX, mouseY) {
+        // Actualiza la posición de la bola según la posición del ratón
+        this.x = mouseX;
+        this.y = mouseY;
+    };
+    PokemonBall.prototype.draw = function () {
+        var enlargedRadius = this.radius * 1.5;
+        // Dibuja la mitad izquierda (blanca)
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, enlargedRadius / 2, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        // Dibuja la mitad derecha (roja)
+        this.ctx.fillStyle = 'red';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, enlargedRadius / 2, Math.PI, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        // Dibuja el punto negro en el centro
+        this.ctx.fillStyle = 'black';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+    return PokemonBall;
+}());
+export { PokemonBall };

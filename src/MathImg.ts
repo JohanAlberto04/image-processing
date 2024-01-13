@@ -1412,7 +1412,6 @@ public static efectoPuzzle(arrImage: number[][][]): number[][][] {
   const height = arrImage[0].length;
   const sal = this.initArray(width, height);
 
-  // Número de piezas en el puzzle (ajustable según tus preferencias)
   const numFilas = 4;
   const numColumnas = 4;
 

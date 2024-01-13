@@ -1283,7 +1283,6 @@ var MathImg = /** @class */ (function () {
         var width = arrImage[0][0].length;
         var height = arrImage[0].length;
         var sal = this.initArray(width, height);
-        // Número de piezas en el puzzle (ajustable según tus preferencias)
         var numFilas = 4;
         var numColumnas = 4;
         // Tamaño de cada pieza

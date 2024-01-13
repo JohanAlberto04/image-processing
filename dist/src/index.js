@@ -6,6 +6,7 @@ import { ParticleText } from "./particle.js";
 import { Stickman } from "./particle.js";
 import { Explosion } from "./particle.js";
 import { UFO } from "./particle.js";
+import { PokemonBall } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
 var lienzo2;
@@ -211,6 +212,7 @@ var imagenSal;
 var stickman;
 var explosions = [];
 var ufo;
+var pokemonBall;
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -343,25 +345,33 @@ function iniciarexplosion(evt) {
     initExplosions();
     animateExplosions();
 }
-/// funcion de platillo 
+/// funcion de platillo ovni
 function initUFO() {
-    // Crea el platillo volador en una posición inicial
     ufo = new UFO(50, 50, 40, 20, ctx);
 }
-// Función de animación para el platillo volador
 function animateUFO() {
-    // Dibuja un fondo o la imagen original
     ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
-    // Actualiza y dibuja el platillo volador
     ufo.update();
     ufo.draw();
-    // Llama a la animación de forma recursiva
     requestAnimationFrame(animateUFO);
 }
-// Llamada a las funciones de inicialización y animación del platillo volador
 function iniciarEfectoUFO() {
     initUFO();
     animateUFO();
+}
+//efecto pokemonball 
+function initPokemonBall() {
+    pokemonBall = new PokemonBall(50, 50, 20, ctx);
+}
+function animatePokemonBall() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    pokemonBall.update(mouse.x, mouse.y);
+    pokemonBall.draw();
+    requestAnimationFrame(animatePokemonBall);
+}
+function iniciarEfectoPokemonBall() {
+    initPokemonBall();
+    animatePokemonBall();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -522,3 +532,4 @@ document.getElementById("Puzzle").addEventListener('click', Puzzle);
 document.getElementById("Curvatura").addEventListener('click', Curvatura);
 document.getElementById("iniciarexplosion").addEventListener('click', iniciarexplosion);
 document.getElementById("iniciarEfectoUFO").addEventListener('click', iniciarEfectoUFO);
+document.getElementById("iniciarEfectoPokemonBall").addEventListener('click', iniciarEfectoPokemonBall);
