@@ -129,3 +129,94 @@ var Stickman = /** @class */ (function () {
     return Stickman;
 }());
 export { Stickman };
+var ExplosionParticle = /** @class */ (function () {
+    function ExplosionParticle(x, y, size, ctx, speed, angle, color) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.ctx = ctx;
+        var speedMultiplier = Math.random() + 0.5;
+        this.speedX = Math.cos(angle) * speed * speedMultiplier * 0.2;
+        this.speedY = Math.sin(angle) * speed * speedMultiplier * 0.2;
+        this.color = color;
+        this.life = Math.random() * 30 + 90; // Vida aleatoria entre 30 y 60 cuadros
+    }
+    ExplosionParticle.prototype.update = function () {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life--;
+    };
+    ExplosionParticle.prototype.draw = function () {
+        this.ctx.fillStyle = this.color;
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    };
+    return ExplosionParticle;
+}());
+var Explosion = /** @class */ (function () {
+    function Explosion(x, y, ctx) {
+        this.particles = [];
+        for (var i = 0; i < 30; i++) {
+            var angle = (Math.PI * 2 * i) / 30;
+            var particle = new ExplosionParticle(x, y, 2, ctx, 2, angle, 'orange');
+            this.particles.push(particle);
+        }
+    }
+    Explosion.prototype.update = function () {
+        for (var i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update();
+            if (this.particles[i].life <= 0) {
+                this.particles.splice(i, 1);
+            }
+        }
+    };
+    Explosion.prototype.draw = function () {
+        for (var _i = 0, _a = this.particles; _i < _a.length; _i++) {
+            var particle = _a[_i];
+            particle.draw();
+        }
+    };
+    return Explosion;
+}());
+export { Explosion };
+var UFO = /** @class */ (function () {
+    function UFO(x, y, width, height, ctx) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.ctx = ctx;
+    }
+    UFO.prototype.update = function () {
+        // Puedes agregar lógica para cambiar la posición del platillo volador aquí
+        this.x += 2; // Ejemplo: mueve el platillo volador hacia la derecha
+    };
+    UFO.prototype.draw = function () {
+        // Dibuja el platillo volador
+        this.ctx.fillStyle = 'silver';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        // Añade la cúpula del platillo volador
+        this.ctx.fillStyle = 'gray';
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y - this.height / 2, this.width / 4, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.fill();
+        // Añade el cuerpo del platillo volador
+        this.ctx.fillStyle = 'silver';
+        this.ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        // Dibuja el haz de luz de abducción
+        this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)';
+        this.ctx.lineWidth = 40;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y);
+        this.ctx.lineTo(this.x, this.y + 230); // Ajusta la longitud del haz de luz según sea necesario
+        this.ctx.stroke();
+    };
+    return UFO;
+}());
+export { UFO };

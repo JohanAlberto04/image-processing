@@ -4,6 +4,8 @@ import { MathImg } from "./MathImg.js";
 import { Particle } from "./particle.js";
 import { ParticleText } from "./particle.js";
 import { Stickman } from "./particle.js";
+import { Explosion } from "./particle.js";
+import { UFO } from "./particle.js";
 import { CanvasLocal } from './canvasLocal.js';
 var lienzo1;
 var lienzo2;
@@ -207,6 +209,8 @@ var particlesArray;
 particlesArray = new Array(0);
 var imagenSal;
 var stickman;
+var explosions = [];
+var ufo;
 function init() {
     //init
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -291,20 +295,14 @@ function animateParticles() {
 ///funcion de stickman 
 var stickmanSpeedX = 2; // Velocidad horizontal del stickman
 var stickmanSpeedY = 1; // Velocidad vertical del stickman
-// Inicialización del stickman
 function initStickman() {
-    // Inicializa la imagen original
     imagenSal = new ImageType(pantalla1, imgLocal.getImage());
     w = imagenSal.getWidth();
     h = imagenSal.getHeight();
-    // Inicializa el stickman en el centro de la pantalla
     stickman = new Stickman(pantalla2.canvas.width / 2, pantalla2.canvas.height / 2, ctx);
 }
-// Función de animación del stickman
 function animateStickman() {
-    // Dibuja la imagen original
     ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
-    // Actualiza la posición del stickman
     stickman.x += stickmanSpeedX;
     stickman.y += stickmanSpeedY;
     // Verifica límites para que el stickman no salga fuera de la imagen
@@ -316,12 +314,54 @@ function animateStickman() {
     }
     // Dibuja el stickman en su nueva posición
     stickman.draw();
-    // Llama a la animación de forma recursiva
     requestAnimationFrame(animateStickman);
 }
 function iniciarstickman(evt) {
     initStickman();
     animateStickman();
+}
+/// funcion de explosion 
+function initExplosions() {
+    //Define el numero de explosiones
+    for (var i = 0; i < 8; i++) {
+        var mouseX = Math.random() * pantalla2.canvas.width;
+        var mouseY = Math.random() * pantalla2.canvas.height;
+        var newExplosion = new Explosion(mouseX, mouseY, pantalla2);
+        explosions.push(newExplosion);
+    }
+}
+function animateExplosions() {
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    for (var _i = 0, explosions_1 = explosions; _i < explosions_1.length; _i++) {
+        var explosion = explosions_1[_i];
+        explosion.update();
+        explosion.draw();
+    }
+    requestAnimationFrame(animateExplosions);
+}
+function iniciarexplosion(evt) {
+    initExplosions();
+    animateExplosions();
+}
+/// funcion de platillo 
+function initUFO() {
+    // Crea el platillo volador en una posición inicial
+    ufo = new UFO(50, 50, 40, 20, ctx);
+}
+// Función de animación para el platillo volador
+function animateUFO() {
+    // Dibuja un fondo o la imagen original
+    ctx.drawImage(imgLocal.getImage(), 0, 0, pantalla2.canvas.width, pantalla2.canvas.height);
+    // Actualiza y dibuja el platillo volador
+    ufo.update();
+    ufo.draw();
+    // Llama a la animación de forma recursiva
+    requestAnimationFrame(animateUFO);
+}
+// Llamada a las funciones de inicialización y animación del platillo volador
+function iniciarEfectoUFO() {
+    initUFO();
+    animateUFO();
 }
 //seccion de histogramas  
 function histogramas(evt) {
@@ -454,76 +494,31 @@ function Prisma(evt) {
     // Aplica la función de efecto de prisma
     imagenSal.imageArray2DtoData(pantalla2, MathImg.efectoPrisma(imagenSal.getArrayImg()));
 }
+function Curvatura(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Aplica la función de efecto de curvatura
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.Curvatura(imagenSal.getArrayImg()));
+}
+function Puzzle(evt) {
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    // Aplica la función de efecto de puzzle
+    imagenSal.imageArray2DtoData(pantalla2, MathImg.efectoPuzzle(imagenSal.getArrayImg()));
+}
 lienzo1.addEventListener('mousemove', handleMouse);
 lienzo1.addEventListener("mousemove", imgLocal.drawSmallImg);
 document.getElementById('files').addEventListener('change', imgLocal.handleFileSelect, false);
 document.getElementById('files2').addEventListener('change', imgLocal4.handleFileSelect, false);
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('drop', imgLocal.handleFileSelect, false);
-//menu op basicas
-document.getElementById("op-gris").addEventListener('click', convertirAGris, false);
-document.getElementById("op-negativo").addEventListener('click', convertirANegativo, false);
-document.getElementById("op-neg-gris").addEventListener('click', convertirANegativoGrises, false);
-document.getElementById("op-rojo").addEventListener('click', convertirARojo, false);
-document.getElementById("op-verde").addEventListener('click', convertirAVerde, false);
-document.getElementById("op-azul").addEventListener('click', convertirAAzul, false);
-document.getElementById("op-tricolor").addEventListener('click', convertirTricolor, false);
-document.getElementById("op-gamma").addEventListener('click', correccionGamma, false);
-document.getElementById("op-umbral1").addEventListener('click', umbralizado, false);
-document.getElementById("op-umbral-2-limites").addEventListener('click', umbral2limites, false);
-document.getElementById("op-desfaseX").addEventListener('click', desfaseX, false);
-document.getElementById("op-desfaseY").addEventListener('click', desfaseY, false);
-document.getElementById("op-desfaseD").addEventListener('click', desfaseD, false);
-//menu op. edicion
-document.getElementById("op-brillo").addEventListener('click', changeBrightness, false);
-document.getElementById("op-ftrans").addEventListener('click', cambioFtransferencia, false);
-document.getElementById("op-gradienteX").addEventListener('click', colorGradienteX, false);
-document.getElementById("op-gradienteY").addEventListener('click', colorGradienteY, false);
-document.getElementById("op-contraste").addEventListener('click', opchangeContraste, false);
-document.getElementById("op-falsocolor").addEventListener('click', opchangeFalsoColor, false);
-//op matematicas
-document.getElementById("op-pow").addEventListener('click', opgetPow, false);
-document.getElementById("op-sqrt").addEventListener('click', sqrt, false);
-document.getElementById("op-sine").addEventListener('click', funcionSine, false);
-document.getElementById("op-cos").addEventListener('click', coseno, false);
-document.getElementById("op-tan").addEventListener('click', tan, false);
-document.getElementById("op-add").addEventListener('click', add, false);
-document.getElementById("op-subtract").addEventListener('click', subtract, false);
-document.getElementById("op-multiplicacion").addEventListener('click', multiplicacion, false);
-document.getElementById("op-div").addEventListener('click', div, false);
-//op con imagenes compuestas
-document.getElementById("op-addimg").addEventListener('click', sumaImg, false);
-document.getElementById("op-marca-agua-centro").addEventListener('click', marcaAguaCentro, false);
-document.getElementById("op-marca-agua-array").addEventListener('click', marcaAguaArray, false);
-//op con efectos
-document.getElementById("op-rain").addEventListener('click', rain, false);
-document.getElementById("op-rain2").addEventListener('click', rain2, false);
-//op con texto.
-document.getElementById("op-text").addEventListener('click', textEfects, false);
-//histogramas
-document.getElementById("op-hist").addEventListener('click', histogramas, false);
-document.getElementById("op-ecualizar").addEventListener('click', ecualizado, false);
-//mortfologia
-document.getElementById("op-eros").addEventListener('click', erosionarImg, false);
-document.getElementById("op-dila").addEventListener('click', dilatarImg, false);
-document.getElementById("op-aper").addEventListener('click', aperturaImg, false);
-document.getElementById("op-cier").addEventListener('click', cierreImg, false);
-//operacion con imagenes siteticas
-document.getElementById("op-pulso").addEventListener('click', generarPulso, false);
-document.getElementById("op-ruido").addEventListener('click', generarRuido, false);
-document.getElementById("op-rampax").addEventListener('click', generarRampaX, false);
-document.getElementById("op-rampay").addEventListener('click', generarRampaY, false);
-//operaciones geometricas
-document.getElementById("op-escalamiento").addEventListener('click', escalarImagen2, false);
-document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, false);
-document.getElementById("op-shearingX").addEventListener('click', shearingX, false);
-document.getElementById("op-shearingY").addEventListener('click', shearingY, false);
-document.getElementById("op-afin").addEventListener('click', tAfin, false);
 //operaciones nuevas
 //operaciones de borrado de color
 document.getElementById("borrarColorRojo").addEventListener('click', BorrarRojo);
 document.getElementById("borrarColorVerde").addEventListener('click', BorrarVerde);
 document.getElementById("borrarColorAzul").addEventListener('click', BorrarAzul);
 document.getElementById("iniciarstickman").addEventListener('click', iniciarstickman);
-document.getElementById('Barrido').addEventListener('click', Barrido);
-document.getElementById('Prisma').addEventListener('click', Prisma);
+document.getElementById("Barrido").addEventListener('click', Barrido);
+document.getElementById("Prisma").addEventListener('click', Prisma);
+document.getElementById("Puzzle").addEventListener('click', Puzzle);
+document.getElementById("Curvatura").addEventListener('click', Curvatura);
+document.getElementById("iniciarexplosion").addEventListener('click', iniciarexplosion);
+document.getElementById("iniciarEfectoUFO").addEventListener('click', iniciarEfectoUFO);

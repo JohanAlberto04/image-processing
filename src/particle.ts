@@ -168,3 +168,116 @@ export class Stickman {
     this.ctx.closePath();
   }
 }
+
+class ExplosionParticle {
+  public x: number;
+  public y: number;
+  public size: number;
+  public ctx: CanvasRenderingContext2D;
+  public speedX: number;
+  public speedY: number;
+  public color: string;
+  public life: number;
+
+  constructor(x: number, y: number, size: number, ctx: CanvasRenderingContext2D, speed: number, angle: number, color: string) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.ctx = ctx;
+    const speedMultiplier = Math.random() + 0.5;
+    this.speedX = Math.cos(angle) * speed * speedMultiplier  * 0.2;
+    this.speedY = Math.sin(angle) * speed * speedMultiplier  * 0.2;
+    this.color = color;
+    this.life = Math.random() * 30 + 90; // Vida aleatoria entre 30 y 60 cuadros
+  }
+
+  public update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life--;
+  }
+
+  public draw() {
+    this.ctx.fillStyle = this.color;
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+}
+
+export class Explosion {
+  protected particles: ExplosionParticle[] = [];
+
+  constructor(x: number, y: number, ctx: CanvasRenderingContext2D) {
+    for (let i = 0; i < 30; i++) {
+      const angle = (Math.PI * 2 * i) / 30;
+      const particle = new ExplosionParticle(x, y, 2, ctx, 2, angle, 'orange');
+      this.particles.push(particle);
+    }
+  }
+
+  public update() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      this.particles[i].update();
+      if (this.particles[i].life <= 0) {
+        this.particles.splice(i, 1);
+      }
+    }
+  }
+
+  public draw() {
+    for (const particle of this.particles) {
+      particle.draw();
+    }
+  }
+}
+
+export class UFO {
+  protected x: number;
+  protected y: number;
+  protected width: number;
+  protected height: number;
+  protected ctx: CanvasRenderingContext2D;
+
+  constructor(x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.ctx = ctx;
+  }
+
+  public update() {
+    // Puedes agregar lógica para cambiar la posición del platillo volador aquí
+    this.x += 2; // Ejemplo: mueve el platillo volador hacia la derecha
+  }
+
+  public draw() {
+    // Dibuja el platillo volador
+    this.ctx.fillStyle = 'silver';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    // Añade la cúpula del platillo volador
+    this.ctx.fillStyle = 'gray';
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y - this.height / 2, this.width / 4, 0, Math.PI * 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    // Añade el cuerpo del platillo volador
+    this.ctx.fillStyle = 'silver';
+    this.ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+
+    // Dibuja el haz de luz de abducción
+    this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)';
+    this.ctx.lineWidth = 40;
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.x, this.y);
+    this.ctx.lineTo(this.x, this.y + 230); // Ajusta la longitud del haz de luz según sea necesario
+    this.ctx.stroke();
+  }
+}

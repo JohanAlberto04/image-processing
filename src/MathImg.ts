@@ -1330,7 +1330,7 @@ public static efectoPrisma(arrImage: number[][][]): number[][][] {
   const sal = this.initArray(width, height);
 
   // Parámetros de la distorsión
-  const factorDistorsion = 10; // Ajusta según la intensidad de la distorsión
+  const factorDistorsion = 10; 
 
   // Itera a través de la imagen original
   for (let i = 0; i < height; i++) {
@@ -1339,7 +1339,7 @@ public static efectoPrisma(arrImage: number[][][]): number[][][] {
           const nuevoI = i + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
           const nuevoJ = j + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
 
-          // Asegúrate de que la nueva posición esté dentro de los límites de la imagen
+          
           const iDistorsionado = Math.max(0, Math.min(height - 1, nuevoI));
           const jDistorsionado = Math.max(0, Math.min(width - 1, nuevoJ));
 
@@ -1354,25 +1354,92 @@ public static efectoPrisma(arrImage: number[][][]): number[][][] {
 }
 
 
+public static Curvatura(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
+
+  // Parámetros de la curvatura
+  const radioCurvatura = 100; 
+  const intensidadCurvatura = 23; 
+
+  // Centro de la curvatura
+  const centroX = width / 2;
+  const centroY = height / 2;
+
+  // Itera a través de la imagen original
+  for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+          // Calcula la distancia del píxel al centro de la curvatura
+          const distanciaX = j - centroX;
+          const distanciaY = i - centroY;
+          const distanciaAlCentro = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+
+          // Aplica la curvatura solo a los píxeles dentro del radio especificado
+          if (distanciaAlCentro < radioCurvatura) {
+              // Calcula la cantidad de curvatura basada en la distancia
+              const factorCurvatura = 1 + intensidadCurvatura * Math.pow(distanciaAlCentro / radioCurvatura, 2);
+
+              // Calcula las nuevas coordenadas curvadas
+              const nuevoX = centroX + distanciaX * factorCurvatura;
+              const nuevoY = centroY + distanciaY * factorCurvatura;
+
+              const xCurvado = Math.max(0, Math.min(width - 1, nuevoX));
+              const yCurvado = Math.max(0, Math.min(height - 1, nuevoY));
+
+              // Aplica el color original a las nuevas coordenadas curvadas
+              sal[0][i][j] = arrImage[0][Math.round(yCurvado)][Math.round(xCurvado)];
+              sal[1][i][j] = arrImage[1][Math.round(yCurvado)][Math.round(xCurvado)];
+              sal[2][i][j] = arrImage[2][Math.round(yCurvado)][Math.round(xCurvado)];
+          } else {
+              // Mantiene el color original para píxeles fuera del radio de curvatura
+              sal[0][i][j] = arrImage[0][i][j];
+              sal[1][i][j] = arrImage[1][i][j];
+              sal[2][i][j] = arrImage[2][i][j];
+          }
+      }
+  }
+
+  return sal;
+}
 
 
 
 
 
+public static efectoPuzzle(arrImage: number[][][]): number[][][] {
+  const width = arrImage[0][0].length;
+  const height = arrImage[0].length;
+  const sal = this.initArray(width, height);
 
+  // Número de piezas en el puzzle (ajustable según tus preferencias)
+  const numFilas = 4;
+  const numColumnas = 4;
 
+  // Tamaño de cada pieza
+  const tamPiezaX = Math.floor(width / numColumnas);
+  const tamPiezaY = Math.floor(height / numFilas);
 
+  // Iterar sobre cada pieza del puzzle
+  for (let fila = 0; fila < numFilas; fila++) {
+      for (let col = 0; col < numColumnas; col++) {
+          // Obtener una posición aleatoria para la pieza en la imagen original
+          const posX = Math.floor(Math.random() * (width - tamPiezaX + 1));
+          const posY = Math.floor(Math.random() * (height - tamPiezaY + 1));
 
+          // Copiar la pieza desde la imagen original a la imagen de salida
+          for (let i = 0; i < tamPiezaY; i++) {
+              for (let j = 0; j < tamPiezaX; j++) {
+                  sal[0][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[0][posY + i][posX + j];
+                  sal[1][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[1][posY + i][posX + j];
+                  sal[2][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[2][posY + i][posX + j];
+              }
+          }
+      }
+  }
 
-
-
-
-
-
-
-
-
-
+  return sal;
+}
 
 
 

@@ -1221,20 +1221,88 @@ var MathImg = /** @class */ (function () {
         var height = arrImage[0].length;
         var sal = this.initArray(width, height);
         // Parámetros de la distorsión
-        var factorDistorsion = 10; // Ajusta según la intensidad de la distorsión
+        var factorDistorsion = 10;
         // Itera a través de la imagen original
         for (var i = 0; i < height; i++) {
             for (var j = 0; j < width; j++) {
                 // Calcula una nueva posición basada en la distorsión
                 var nuevoI = i + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
                 var nuevoJ = j + Math.floor(Math.random() * factorDistorsion) - Math.floor(factorDistorsion / 2);
-                // Asegúrate de que la nueva posición esté dentro de los límites de la imagen
                 var iDistorsionado = Math.max(0, Math.min(height - 1, nuevoI));
                 var jDistorsionado = Math.max(0, Math.min(width - 1, nuevoJ));
                 // Aplica el color original a la nueva posición
                 sal[0][i][j] = arrImage[0][iDistorsionado][jDistorsionado];
                 sal[1][i][j] = arrImage[1][iDistorsionado][jDistorsionado];
                 sal[2][i][j] = arrImage[2][iDistorsionado][jDistorsionado];
+            }
+        }
+        return sal;
+    };
+    MathImg.Curvatura = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Parámetros de la curvatura
+        var radioCurvatura = 100;
+        var intensidadCurvatura = 23;
+        // Centro de la curvatura
+        var centroX = width / 2;
+        var centroY = height / 2;
+        // Itera a través de la imagen original
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                // Calcula la distancia del píxel al centro de la curvatura
+                var distanciaX = j - centroX;
+                var distanciaY = i - centroY;
+                var distanciaAlCentro = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+                // Aplica la curvatura solo a los píxeles dentro del radio especificado
+                if (distanciaAlCentro < radioCurvatura) {
+                    // Calcula la cantidad de curvatura basada en la distancia
+                    var factorCurvatura = 1 + intensidadCurvatura * Math.pow(distanciaAlCentro / radioCurvatura, 2);
+                    // Calcula las nuevas coordenadas curvadas
+                    var nuevoX = centroX + distanciaX * factorCurvatura;
+                    var nuevoY = centroY + distanciaY * factorCurvatura;
+                    var xCurvado = Math.max(0, Math.min(width - 1, nuevoX));
+                    var yCurvado = Math.max(0, Math.min(height - 1, nuevoY));
+                    // Aplica el color original a las nuevas coordenadas curvadas
+                    sal[0][i][j] = arrImage[0][Math.round(yCurvado)][Math.round(xCurvado)];
+                    sal[1][i][j] = arrImage[1][Math.round(yCurvado)][Math.round(xCurvado)];
+                    sal[2][i][j] = arrImage[2][Math.round(yCurvado)][Math.round(xCurvado)];
+                }
+                else {
+                    // Mantiene el color original para píxeles fuera del radio de curvatura
+                    sal[0][i][j] = arrImage[0][i][j];
+                    sal[1][i][j] = arrImage[1][i][j];
+                    sal[2][i][j] = arrImage[2][i][j];
+                }
+            }
+        }
+        return sal;
+    };
+    MathImg.efectoPuzzle = function (arrImage) {
+        var width = arrImage[0][0].length;
+        var height = arrImage[0].length;
+        var sal = this.initArray(width, height);
+        // Número de piezas en el puzzle (ajustable según tus preferencias)
+        var numFilas = 4;
+        var numColumnas = 4;
+        // Tamaño de cada pieza
+        var tamPiezaX = Math.floor(width / numColumnas);
+        var tamPiezaY = Math.floor(height / numFilas);
+        // Iterar sobre cada pieza del puzzle
+        for (var fila = 0; fila < numFilas; fila++) {
+            for (var col = 0; col < numColumnas; col++) {
+                // Obtener una posición aleatoria para la pieza en la imagen original
+                var posX = Math.floor(Math.random() * (width - tamPiezaX + 1));
+                var posY = Math.floor(Math.random() * (height - tamPiezaY + 1));
+                // Copiar la pieza desde la imagen original a la imagen de salida
+                for (var i = 0; i < tamPiezaY; i++) {
+                    for (var j = 0; j < tamPiezaX; j++) {
+                        sal[0][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[0][posY + i][posX + j];
+                        sal[1][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[1][posY + i][posX + j];
+                        sal[2][fila * tamPiezaY + i][col * tamPiezaX + j] = arrImage[2][posY + i][posX + j];
+                    }
+                }
             }
         }
         return sal;
